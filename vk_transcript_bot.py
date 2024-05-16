@@ -1,38 +1,40 @@
-import requests
-import subprocess
-import vk_api
-from vk_api import VkUpload
-from vk_api.longpoll import VkLongPoll, VkEventType
-from vk_api.utils import get_random_id
-import os
-vk_session = vk_api.VkApi(token='')
-vk = vk_session.get_api()
-longpoll = VkLongPoll(vk_session)
-def main():
-    session = requests.Session()
-    vk = vk_session.get_api()
-
-    for event in longpoll.listen():
-        text = 'try again.'
-        try:
-            if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
-                print('id{}: "{}"'.format(event.user_id, event.text), end=' ')
-                subprocess.check_output('python3 download_video.py -url {}'.format(event.text),
-                                        shell = True)
-                vk.messages.send(
-                        user_id=event.user_id,
-                        random_id=get_random_id(),
-                        message='video uploaded on server'
-                    )
-                subprocess.check_output('python3 recognize.py',
-                                       shell = True)
-                vk.messages.send(
-                        user_id=event.user_id,
-                        random_id=get_random_id(),
-                        message='video recognized'
-                    )
-                text = open('result.txt', 'r', encoding='utf-8').read()
-                if len(text) < 4000:
+Python 3.12.3 (tags/v3.12.3:f6650f9, Apr  9 2024, 14:05:25) [MSC v.1938 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license()" for more information.
+>>>     import requests
+... import subprocess
+... import vk_api
+... from vk_api import VkUpload
+... from vk_api.longpoll import VkLongPoll, VkEventType
+... from vk_api.utils import get_random_id
+... import os
+... vk_session = vk_api.VkApi(token='')
+... vk = vk_session.get_api()
+... longpoll = VkLongPoll(vk_session)
+... def main():
+...     session = requests.Session()
+...     vk = vk_session.get_api()
+... 
+...     for event in longpoll.listen():
+...         text = 'try again.'
+...         try:
+...             if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
+...                 print('id{}: "{}"'.format(event.user_id, event.text), end=' ')
+...                 subprocess.check_output('python3 download_video.py -url {}'.format(event.text),
+...                                         shell = True)
+...                 vk.messages.send(
+...                         user_id=event.user_id,
+...                         random_id=get_random_id(),
+...                         message='video uploaded on server'
+...                     )
+...                 subprocess.check_output('python3 recognize.py',
+...                                        shell = True)
+...                 vk.messages.send(
+...                         user_id=event.user_id,
+...                         random_id=get_random_id(),
+...                         message='video recognized'
+...                     )
+...                 text = open('result.txt', 'r', encoding='utf-8').read()
+...                 if len(text) < 4000:
                     vk.messages.send(
                         user_id=event.user_id,
                         random_id=get_random_id(),
@@ -71,3 +73,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
+SyntaxError: unexpected indent
